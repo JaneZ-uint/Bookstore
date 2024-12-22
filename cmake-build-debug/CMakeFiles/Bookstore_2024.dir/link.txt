@@ -1,0 +1,1 @@
+/usr/bin/c++ -g CMakeFiles/Bookstore_2024.dir/src/main.cpp.o CMakeFiles/Bookstore_2024.dir/src/Book.cpp.o CMakeFiles/Bookstore_2024.dir/src/Blog.cpp.o CMakeFiles/Bookstore_2024.dir/src/Finance.cpp.o CMakeFiles/Bookstore_2024.dir/src/Error.cpp.o CMakeFiles/Bookstore_2024.dir/src/User.cpp.o CMakeFiles/Bookstore_2024.dir/src/Tokenscanner.cpp.o -o Bookstore_2024 
