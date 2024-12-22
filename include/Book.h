@@ -4,6 +4,7 @@
 
 #ifndef BOOK_H
 #define BOOK_H
+#include <iostream>
 #include "Block.h"
 #include "Blog.h"
 #include "Book.h"
@@ -54,6 +55,7 @@ private:
 
 public:
     MAP() = default;
+
 };
 
 
