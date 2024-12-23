@@ -191,73 +191,63 @@ public:
         tmp.first[KeySize] = '\0'; // 确保字符串以 '\0' 结尾
         tmp.second = value;
         arr a;
-        if (current == nullptr) {
-            // 如果块状链表中还没有任何块
-            head new_head;
-            new_head.size = 1;
-            new_head.indexnum = 0;
-            strncpy(new_head.minele.first, tmp.first, KeySize);
-            new_head.minele.first[KeySize] = '\0';
-            new_head.minele.second = tmp.second;
-            strncpy(new_head.maxele.first, tmp.first, KeySize);
-            new_head.maxele.first[KeySize] = '\0';
-            new_head.maxele.second = tmp.second;
-            tair->next = new node(new_head);
-            tair = tair->next;
-
-            strncpy(a[0].first, key, KeySize);
-            a[0].first[KeySize] = '\0';
-            a[0].second = value;
-            file2.seekp(0);
-            file2.write(reinterpret_cast<char*>(&a), sizeof(arr));
-            file2.close();
-            return;
-        } else {
-            while (current != nullptr) {
-                if (smallerequal(tmp, current->info.maxele) || current->next == nullptr) {
-                    file2.seekg(current->info.indexnum * sizeof(arr));
-                    file2.read(reinterpret_cast<char*>(&a), sizeof(arr));
-                    int i;
-                    // 顺序查找版的 lowerbound
-                    for (i = 0; i < current->info.size; i++) {
-                        if (largerequal(a[i], tmp)) {
-                            break;
-                        }
+        while (current != nullptr) {
+            if (smallerequal(tmp, current->info.maxele) || current->next == nullptr) {
+                file2.seekg(current->info.indexnum * sizeof(arr));
+                file2.read(reinterpret_cast<char*>(&a), sizeof(arr));
+                int i;
+                // 顺序查找版的 lowerbound
+                for (i = 0; i < current->info.size; i++) {
+                    if (largerequal(a[i], tmp)) {
+                        break;
                     }
-                    if (equal(a[i], tmp)) {
-                        file2.close();
-                        return;
-                    } else {
-                        // 如果块还未满
-                        if (current->info.size < BlockSize) {
-                            for (int j = current->info.size - 1; j >= i; j--) {
-                                strncpy(a[j + 1].first, a[j].first, KeySize);
-                                a[j + 1].first[KeySize] = '\0';
-                                a[j + 1].second = a[j].second;
-                            }
-                            strncpy(a[i].first, key, KeySize);
-                            a[i].first[KeySize] = '\0';
-                            a[i].second = value;
-                            file2.seekp(current->info.indexnum * sizeof(arr));
-                            file2.write(reinterpret_cast<char*>(&a), sizeof(arr));
-                            strncpy(current->info.minele.first, a[0].first, KeySize);
-                            current->info.minele.first[KeySize] = '\0';
-                            current->info.minele.second = a[0].second;
-                            strncpy(current->info.maxele.first, a[current->info.size].first, KeySize);
-                            current->info.maxele.first[KeySize] = '\0';
-                            current->info.maxele.second = a[current->info.size].second;
-                            current->info.size++;
-                        } else {
-                            // 如果块已经满了，进行裂块操作
-                            splitBlock(current, tmp, a, i);
-                        }
-                    }
+                }
+                if (equal(a[i], tmp)) {
                     file2.close();
                     return;
+                } else {
+                    // 如果块还未满
+                    if (current->info.size < BlockSize) {
+                        for (int j = current->info.size - 1; j >= i; j--) {
+                            strncpy(a[j + 1].first, a[j].first, KeySize);
+                            a[j + 1].first[KeySize] = '\0';
+                            a[j + 1].second = a[j].second;
+                        }
+                        strncpy(a[i].first, key, KeySize);
+                        a[i].first[KeySize] = '\0';
+                        a[i].second = value;
+                        file2.seekp(current->info.indexnum * sizeof(arr));
+                        file2.write(reinterpret_cast<char*>(&a), sizeof(arr));
+                        strncpy(current->info.minele.first, a[0].first, KeySize);
+                        current->info.minele.first[KeySize] = '\0';
+                        current->info.minele.second = a[0].second;
+                        strncpy(current->info.maxele.first, a[current->info.size].first, KeySize);
+                        current->info.maxele.first[KeySize] = '\0';
+                        current->info.maxele.second = a[current->info.size].second;
+                        current->info.size++;
+                    } else {
+                        // 如果块已经满了，进行裂块操作
+                        splitBlock(current, tmp, a, i);
+                    }
                 }
-                current = current->next;
+                file2.close();
+                return;
             }
+            current = current->next;
         }
+        strncpy(a[0].first, tmp.first, 65);
+        a[0].second = tmp.second;
+        file2.seekp(0);
+        file2.write(reinterpret_cast<char *>(&a), sizeof(arr));
+        head n;
+        strncpy(n.maxele.first, tmp.first, 65);
+        n.maxele.second = tmp.second;
+        strncpy(n.minele.first, tmp.first, 65);
+        n.minele.second = tmp.second;
+        n.size = 1;
+        tair = new node(n);
+        Head -> next = tair;
+        file2.close();
     }
 
     // delete操作
