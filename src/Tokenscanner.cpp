@@ -3,7 +3,7 @@
 //
 #include "../include/Tokenscanner.h"
 
-std::vector<std::string> Tokenscanner::TokenSeparator(const std::string &input, std::vector<std::string> result) {
+void Tokenscanner::TokenSeparator(const std::string input, std::vector<std::string> &result) {
     std::string a;
     for(int i = 0 ; i < input.size() ; i++) {
         if(i == input.size() || input[i] == ' ') {
@@ -17,7 +17,6 @@ std::vector<std::string> Tokenscanner::TokenSeparator(const std::string &input, 
             a+= input[i];
         }
     }
-    return result;
 }
 
 //对于购买数量Quantity 交易笔数

@@ -17,52 +17,51 @@
 #include <vector>
 
 class Tokenscanner {
-private:
-    std::string command;
-    std::vector<std::string> Tokens;
+//private:
+    //std::string command;
+    //std::vector<std::string> Tokens;
 public:
-    Tokenscanner(const std::string& input):command(input){}
 
     //利用TokenSeparator得到块的切片
-    std::vector<std::string> TokenSeparator(const std::string& input, std::vector<std::string> result);
+    static void TokenSeparator(const std::string input, std::vector<std::string> &result);
 
 
     //对于购买数量Quantity 交易笔数
     //最大长度: 10位 正整数
-    int StringToIntegerQuant(const std::string& s);
+    static int StringToIntegerQuant(const std::string& s);
 
     //交易总额 Count
     //最大长度 : 10位 可以为0
-    int StringToIntegerCount(const std::string& s);
+    static int StringToIntegerCount(const std::string& s);
 
     //对于图书单价Price 交易总额TotalCost 最大长度: 13位
     //精度固定为小数点后2位
-    double StringToDouble(const std::string& s);
+    static double StringToDouble(const std::string& s);
 
     //检查UserID Password CurrentPassword NewPassword字符集是否合法
     //数字，字母，下划线；
     //30
-    void checkIDPassword(const std::string& s);
+    static void checkIDPassword(const std::string& s);
 
     //检查Username
     //除不可见字符以外 ASCII 字符；
     //30
-    void checkUsername(const std::string& s);
+    static void checkUsername(const std::string& s);
 
     //检查Privilege
     //数字
     //只允许出现 0 1 3 7
-    void checkPrivilege(const std::string& s);
+    static void checkPrivilege(const std::string& s);
 
     //检查ISBN
     //除不可见字符以外 ASCII 字符；
     // 20
-    void checkISBN(const std::string& s);
+    static void checkISBN(const std::string& s);
 
     //检查Bookname Author
     //除不可见字符和英文双引号以外 ASCII 字符
     // 60
-    void checkBooknameAuthor(const std::string& s);
+    static void checkBooknameAuthor(const std::string& s);
 
     //检查Keyword
     //除不可见字符和英文双引号以外 ASCII 字符；
@@ -70,20 +69,20 @@ public:
     //[keyword] 内容以 | 为分隔可以出现多段信息。
     //如 math|magic|quantum 表示该图书具有三个无顺序的关键词
     //math, magic 和 quantum，每段信息长度至少为 1。
-    void checkKeyWordSingle(const std::string& s);
+    static void checkKeyWordSingle(const std::string& s);
 
     //检查show指令的情况
     //对show指令进行切片
     //附加参数内容为空则操作失败；
     //无附加参数时，所有图书均满足要求；
     //[Keyword] 中出现多个关键词则操作失败。
-    std::string cutShow(const std::string& s);
+    static std::string cutShow(const std::string& s);
 
     //检查modify 指令的情况
     //附加参数内容为空则操作失败；
     //[keyword] 包含重复信息段则操作失败。
     //有重复附加参数为非法指令；
-    std::string cutModify(const std::string& s);
+    static std::string cutModify(const std::string& s);
 
     //检查多个Keyword的情况
     //[keyword] 内容以 | 为分隔可以出现多段信息。
@@ -92,7 +91,7 @@ public:
     //每段信息长度至少为 1。
     //除不可见字符和英文双引号以外 ASCII 字符
     //60
-    void checkKeywordAll(const std::string& s);
+    static void checkKeywordAll(const std::string& s);
 };
 
 
