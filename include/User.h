@@ -13,11 +13,12 @@
 #include "Tokenscanner.h"
 #include <cstring>
 #include <string>
+#include <unordered_map>
 
 //记录用户信息
 class UserInfo {
     friend class User;
-    friend class Block<500,71 , 71>;
+    friend class Block<500 , 71 , UserInfo>;
     friend class Book;
     friend class BookInfo;
     friend class Finance;
@@ -28,8 +29,11 @@ private:
     char Password[71] = {'\0'};  //密码
     char SpecialInfo[71] = {'\0'}; //UserID对映的各种个人信息
     int level  = 0;  //权限等级
+    bool selected = false; //不涉及选择图书
 
 public:
+    char selectedISBN[71] = {'\0'};
+
     UserInfo() = default;
     //构造函数
     UserInfo(const char* User_ID ,const char* User_name , const char* password , int LEVEL ) {
@@ -38,6 +42,17 @@ public:
         std::strncpy(Password , password , 71);
         level = LEVEL;
     }
+    //重载运算符
+
+    bool operator==(const UserInfo &) const;
+
+    bool operator<(const UserInfo &)const;
+
+    bool operator<=(const UserInfo &)const;
+
+    bool operator>(const UserInfo &)const;
+
+    bool operator>=(const UserInfo& )const;
 };
 
 
@@ -48,11 +63,13 @@ class User {
     friend class Finance;
 private:
     int currentlevel = 0; // 当前用户权限
-    Block<500 , 71 , 71> UserBlock; //存储当前系统内所有账户信息
+    Block<500 , 71 , UserInfo> UserBlock; //存储当前系统内所有账户信息
+    std::unordered_map<std::string , int> Log_Map ; //用于存储当前用户处于登录状态的号有几个
 
 public:
 
     //维护登录栈
+    //为了在logout操作中得到最后一次su的账户
     std::vector<UserInfo> LogStack;
     User();
     ~User();
@@ -62,7 +79,7 @@ public:
     void su(const char* User_ID , const char* password , Blog& blog);
 
     //注销账户
-    void logout(Blog& blog );
+    void logout(Book& book , Blog& blog );
 
     //注册账户
     void Register(const char* User_ID , const char* password , const char* user_name , Blog& blog);
