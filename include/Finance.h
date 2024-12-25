@@ -19,16 +19,16 @@ class FinanceInfo {
     friend class Finance;
     friend class Book;
 private:
-    double price = 0.00; // 图书价格
+    double price = 0.00; // 图书售价
     double cost = 0.00; //图书消费
-    int sum = 0;  //交易总笔数
+    int QUANT = 0;  //数量
     bool state; // + or -
     char UserID[71] = {'\0'}; //进行操作的人员
     char ISBN[71] = {'\0'}; //被操作图书的isbn号
-    double money; //交易金额
+    double money; //交易总额
 public:
     FinanceInfo():money(0.00) ,state(true){}
-    explicit FinanceInfo(double Price, double Cost ,int Sum , bool Status , const char* User_ID, const char* isbn):price(Price),cost(Cost),sum(Sum), state(Status) {
+    explicit FinanceInfo(double Price, double Cost ,int QUANT , bool Status , const char* User_ID, const char* isbn,double money):price(Price),cost(Cost),QUANT(QUANT), state(Status),money(money) {
         strcpy(UserID , User_ID);
         strcpy(ISBN , isbn);
     }

@@ -36,6 +36,53 @@ private:
     node* Head;
     node* tair;
 
+    // 比较函数
+    bool larger(const std::pair<char[KeySize + 1], ValueType>& a, const std::pair<char[KeySize + 1], ValueType>& b) {
+        int cmp = strcmp(a.first, b.first);
+        if (cmp > 0) {
+            return true;
+        } else if (cmp < 0) {
+            return false;
+        } else {
+            return a.second > b.second; // 使用 ValueType 的 > 运算符
+        }
+    }
+
+    bool largerequal(const std::pair<char[KeySize + 1], ValueType>& a, const std::pair<char[KeySize + 1], ValueType>& b) {
+        int cmp = strcmp(a.first, b.first);
+        if (cmp > 0) {
+            return true;
+        } else if (cmp == 0) {
+            return a.second >= b.second; // 使用 ValueType 的 >= 运算符
+        }
+        return false;
+    }
+
+    bool smaller(const std::pair<char[KeySize + 1], ValueType>& a, const std::pair<char[KeySize + 1], ValueType>& b) {
+        int cmp = strcmp(a.first, b.first);
+        if (cmp < 0) {
+            return true;
+        } else if (cmp > 0) {
+            return false;
+        } else {
+            return a.second < b.second; // 使用 ValueType 的 < 运算符
+        }
+    }
+
+    bool smallerequal(const std::pair<char[KeySize + 1], ValueType>& a, const std::pair<char[KeySize + 1], ValueType>& b) {
+        int cmp = strcmp(a.first, b.first);
+        if (cmp < 0) {
+            return true;
+        } else if (cmp == 0) {
+            return a.second <= b.second; // 使用 ValueType 的 <= 运算符
+        }
+        return false;
+    }
+
+    bool equal(const std::pair<char[KeySize + 1], ValueType>& a, const std::pair<char[KeySize + 1], ValueType>& b) {
+        return strcmp(a.first, b.first) == 0 && a.second == b.second; // 使用 ValueType 的 == 运算符
+    }
+
     // 分块函数
     void splitBlock(node* current, const std::pair<char[KeySize + 1], ValueType>& tmp, arr& a, int i) {
         head new_headnode; // 创建新的头节点
@@ -259,14 +306,13 @@ public:
     }
 
     // find操作
-    bool find(const char* key) {
+    std::vector<ValueType> find(const char* key) {
         file2.open(file2_name, std::ios::binary | std::ios::in | std::ios::out);
         node* current = Head->next;
         char tmp[KeySize + 1] = {'\0'};
         strncpy(tmp, key, KeySize);
         tmp[KeySize] = '\0';
         std::vector<ValueType> result;
-        bool found = false;
         while (current != nullptr) {
             // 如果有在当前块中的可能性
             if (strcmp(current->info.minele.first, tmp) <= 0 && strcmp(current->info.maxele.first, tmp) >= 0) {
@@ -276,7 +322,6 @@ public:
                 for (int i = 0; i < current->info.size; i++) {
                     if (strcmp(a[i].first, tmp) == 0) {
                         result.push_back(a[i].second);
-                        found = true;
                     } else if (strcmp(a[i].first, tmp) > 0) {
                         break;
                     }
@@ -287,7 +332,7 @@ public:
             current = current->next;
         }
         file2.close();
-        return found; // 返回是否找到
+        return result; // 返回匹配结果的 vector
     }
 };
 
