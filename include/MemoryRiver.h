@@ -5,6 +5,8 @@
 #ifndef MEMORYRIVER_H
 #define MEMORYRIVER_H
 #include <fstream>
+#include "Finance.h"
+#include <unistd.h>
 
 using std::string;
 using std::fstream;
@@ -13,6 +15,7 @@ using std::ofstream;
 
 template<class T, int info_len = 2>
 class MemoryRiver {
+    friend class Finance;
 private:
     /* your code here */
     fstream file;
@@ -52,6 +55,15 @@ public:
         file.seekg(0);
         int x;
         file.read(reinterpret_cast<char*> (&x), sizeof(int));
+        file.close();
+        return;
+    }
+
+    void read(T &t, const int index, int size) {
+        /* your code here */
+        file.open(file_name);
+        file.seekg(index);
+        file.read(reinterpret_cast<char*>(&t) , sizeofT*size);
         file.close();
         return;
     }

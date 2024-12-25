@@ -17,7 +17,7 @@
 class BookInfo {
     friend class Book;
     friend class User;
-    friend class Block<500 , 71 , 71>;
+    friend class Block<500 , 71 , BookInfo>;
     friend class FinanceInfo;
 private:
     char ISBN[71] = {'\0'};
@@ -25,12 +25,26 @@ private:
     char Author[71] = {'\0'};
     char KeyWord[71] = {'\0'};
     int Quantity = 0;
-    double Price = 0;
+    double Price = -1;
     double Totalcost = 0;
     bool hasindex = false; //判断当前图书是否具有关键字
 public:
     BookInfo() = default;
-    ~BookInfo() = default;
+    BookInfo(const char* isbn) {
+        strcpy(ISBN, isbn);
+    }
+
+    //重载运算符
+
+    bool operator==(const BookInfo &) const;
+
+    bool operator<(const BookInfo &)const;
+
+    bool operator<=(const BookInfo &)const;
+
+    bool operator>(const BookInfo &)const;
+
+    bool operator>=(const BookInfo& )const;
 };
 
 
@@ -40,15 +54,16 @@ class Book {
     friend class User;
     friend class Blog;
 private:
-    Block<500 , 71  ,71> Book_ISBN; //ISBN->ISBN映射
-    Block<500 , 71 , 71> Book_Name; //name->ISBN映射
-    Block<500 , 71 , 71> Book_Author; //Author->ISBN映射
-    Block<500 , 71 , 71> Block_keyword;  //keyword->ISBN映射
+    //表面上看映射到BookInfo 实际上直接映射的是 ISBN(好吧好像也不完全
+    Block<500 , 71  ,BookInfo> Book_ISBN; //ISBN->ISBN映射
+    Block<500 , 71 , BookInfo> Book_Name; //name->ISBN映射
+    Block<500 , 71 , BookInfo> Book_Author; //Author->ISBN映射
+    Block<500 , 71 , BookInfo> Book_keyword;  //keyword->ISBN映射
 
 public:
     //当前选中的图书的全部信息
     BookInfo selected;
-    Book():Book_ISBN("ISBN1", "ISBN2"), Book_Name("name1","name2"),Book_Author("author1","author2"),Block_keyword("keyword1","keyword2") {}
+    Book():Book_ISBN("ISBN1", "ISBN2"), Book_Name("name1","name2"),Book_Author("author1","author2"),Book_keyword("keyword1","keyword2") {}
     ~Book();
 
     //检索图书
@@ -63,8 +78,11 @@ public:
     //选择图书
     void Select_Book(const char* isbn,User& UserManage, Blog& blog , const char* command);
 
+    //分割多个关键词
+    std::vector<std::string> SplitKeywords(const char* allkeyword);
+
     //修改图书信息
-    void modify(const char* isbn , const char* bookname , const char* Author, const char* all_keywords , double price ,User& UserManage, Blog& blog , const char* command);
+    void modify(const char* isbn , const char* bookname ,const char* Author, const char* all_keywords , double price ,User& UserManage, Blog& blog , const char* command);
 
     //图书进货
     void ImportBook(const int QUANT , double COST ,User& UserManage,Finance& money, Blog& blog , const char* command);
