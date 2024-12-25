@@ -25,8 +25,8 @@ private:
     char Author[71] = {'\0'};
     char KeyWord[71] = {'\0'};
     int Quantity = 0;
-    double Price = -1;
-    double Totalcost = 0;
+    double Price = -1; //售价
+    double Importprice = 0; // 进价
     bool hasindex = false; //判断当前图书是否具有关键字
 public:
     BookInfo() = default;

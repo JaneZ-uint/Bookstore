@@ -49,7 +49,7 @@ public:
     void write_info(int tmp, int n) {
         if (n > info_len) return;
         /* your code here */
-        file.open(file_name, std::fstream::in | std::fstream::out);
+        file.open(file_name, std::ios::in | std::ios::out);
         file.seekp(0);
         file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
         file.seekg(0);
@@ -59,7 +59,16 @@ public:
         return;
     }
 
-    void read(T &t, const int index, int size) {
+    void write(T &t,  int index , int size = 1) {
+        /* your code here */
+        file.open(file_name , std::ios::in | std::ios::out);
+        file.seekp(index);
+        file.write(reinterpret_cast<char*>(&t),sizeofT*size);
+        file.close();
+        return ;
+    }
+
+    void read(T &t,  int index, int size) {
         /* your code here */
         file.open(file_name);
         file.seekg(index);
