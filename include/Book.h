@@ -13,6 +13,10 @@
 #include "Tokenscanner.h"
 #include "User.h"
 
+class Blog;
+class User;
+class Finance;
+
 //存储所有图书相关信息
 class BookInfo {
     friend class Book;
@@ -64,19 +68,19 @@ public:
     //当前选中的图书的全部信息
     BookInfo selected;
     Book():Book_ISBN("ISBN1", "ISBN2"), Book_Name("name1","name2"),Book_Author("author1","author2"),Book_keyword("keyword1","keyword2") {}
-    ~Book();
+    ~Book() = default;
 
     //检索图书
-    void showInfo(const char* isbn , const char* bookname , const char* Author, const char* singlekeyword,User& UserManage, Blog& blog , const char* command);
+    void showInfo(const char* isbn , const char* bookname , const char* Author, const char* singlekeyword,User& UserManage, Blog& blog);
 
     //special situation
-    void showeverything(User& UserManage, Blog& blog , const char* command);
+    void showeverything(User& UserManage, Blog& blog );
 
     //购买图书
-    void Shopping(const char* isbn , const int QUANT ,User& UserManage, Finance& money , Blog& blog , const char* command);
+    void Shopping(const char* isbn , const int QUANT ,User& UserManage, Finance& money , Blog& blog);
 
     //选择图书
-    void Select_Book(const char* isbn,User& UserManage, Blog& blog , const char* command);
+    void Select_Book(const char* isbn,User& UserManage, Blog& blog,const char* command);
 
     //分割多个关键词
     std::vector<std::string> SplitKeywords(const char* allkeyword);

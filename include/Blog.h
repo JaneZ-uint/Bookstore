@@ -12,6 +12,8 @@
 #include "Finance.h"
 #include "Tokenscanner.h"
 #include "User.h"
+#include "MemoryRiver.h"
+
 
 class Information {
     friend class Blog;
@@ -38,17 +40,18 @@ public:
 
 class Blog {
 private:
-
+    MemoryRiver<Information , 1> blog;
 public:
     Blog();
 
     //记录博客
-    void WriteBlog();
+    void WriteBlog(Information& info);
 
-    //读取员工ID
+    //读取员工工作报告
     void ReadWorker(User& UserManage);
 
-    //
+    //读取全部信息
+    void ReadAll(User& UserManage);
 };
 
 #endif //BLOG_H

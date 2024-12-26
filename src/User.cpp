@@ -102,7 +102,7 @@ bool UserInfo::operator>=(const UserInfo &other) const {
 
 User::User():UserBlock("User1", "User2"){
     const char* username = "JaneZ";
-    const char* password = "20241224";
+    const char* password = "sjtu";
     const char* userid = "root";
     const int userlevel = 7;
     UserInfo owner(userid , username , password , userlevel);
@@ -119,13 +119,13 @@ void User::su(const char *User_ID, const char *password, Blog &blog) {
         throw InvalidExpression();
     }
     UserInfo suUser = result[0];
-    UserBlock.remove(User_ID , suUser);
     if(password == nullptr && currentlevel <= suUser.level) {
         throw InvalidExpression();
     }
     if(password != nullptr && strcmp(password , suUser.Password) != 0) {
         throw InvalidExpression();
     }
+    UserBlock.remove(User_ID , suUser);
     //更新当前账户系统的用户
     currentlevel = suUser.level;
 
@@ -145,7 +145,8 @@ void User::su(const char *User_ID, const char *password, Blog &blog) {
     //更新块状链表
     UserBlock.insert(User_ID , suUser);
 
-    //TODO 写入日志部分
+    Information content(User_ID , "su" , suUser.level);
+    blog.WriteBlog(content);
 }
 
 //注销账户 logout
@@ -175,10 +176,11 @@ void User::logout(Book &book , Blog &blog) {
         UserInfo newUser = LogStack.back();
         currentlevel = newUser.level;
 
-        //TODO 补充选择图书相关内容
+        std::vector<BookInfo> nextone = book.Book_ISBN.find(newUser.selectedISBN);
+        book.selected = nextone[0];
     }
 
-    //TODO 完成日志部分
+    Information content(currentLogouter.UserID ,"logout" , currentLogouter.level);
 }
 
 void User::Register(const char *User_ID, const char *password, const char *user_name, Blog &blog) {
@@ -187,7 +189,8 @@ void User::Register(const char *User_ID, const char *password, const char *user_
     if(!UserBlock.insert(User_ID , newUser)) {
         throw InvalidExpression();
     }
-    //TODO 完成日志部分
+    Information content(User_ID , "register" , 0);
+    blog.WriteBlog(content);
 }
 
 void User::RevisePassword(const char *User_ID, const char *currentPassword, const char *newPassword, Blog &blog, const char *command) {
@@ -208,7 +211,8 @@ void User::RevisePassword(const char *User_ID, const char *currentPassword, cons
     UserBlock.remove(User_ID , nowUser);
     strcpy(nowUser.Password , newPassword);
     UserBlock.insert(User_ID , nowUser);
-    //TODO 完成日志部分
+    Information content(LogStack.back().UserID , "revise password" , currentlevel);
+    blog.WriteBlog(content);
 }
 
 //创建账户
@@ -230,7 +234,8 @@ void User::UserAdd(const char *User_ID, const char *password, const int LEVEL, c
         UserBlock.insert(User_ID , addUser);
     }
 
-    //TODO 完成日志部分
+    Information content(LogStack.back().UserID , "add user" , currentlevel);
+    blog.WriteBlog(content);
 }
 
 void User::Delete(const char *User_ID, Blog &blog) {
@@ -247,5 +252,10 @@ void User::Delete(const char *User_ID, Blog &blog) {
         throw InvalidExpression();
     }
     UserBlock.remove(User_ID , result[0]);
-    //TODO 完成日志部分
+    Information content(LogStack.back().UserID , "delete" , 7);
+    blog.WriteBlog(content);
+}
+
+void User::Eliminate() {
+    Log_Map.clear();
 }

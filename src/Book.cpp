@@ -47,7 +47,7 @@ bool BookInfo::operator>=(const BookInfo &other) const {
     return false;
 }
 
-void Book::showInfo(const char *isbn, const char *bookname, const char *Author, const char *singlekeyword, User &UserManage, Blog &blog, const char *command) {
+void Book::showInfo(const char *isbn, const char *bookname, const char *Author, const char *singlekeyword, User &UserManage, Blog &blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -104,7 +104,7 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
     //TODO 完成日志记录
 }
 
-void Book::showeverything(User &UserManage, Blog &blog, const char *command) {
+void Book::showeverything(User &UserManage, Blog &blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -112,14 +112,15 @@ void Book::showeverything(User &UserManage, Blog &blog, const char *command) {
     if(nowUser.level == 0) {
         throw InvalidExpression();
     }
-    for(auto it : Book_ISBN) {
+    std::vector<BookInfo> result = Book_ISBN.find_all();
+    for(auto &it: result) {
         std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
     }
 
     //TODO 完成日志记录
 }
 
-void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance &money, Blog &blog, const char *command) {
+void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance &money, Blog &blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -179,7 +180,7 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
     //TODO 完成日志记录
 }
 
-void Book::Select_Book(const char *isbn, User &UserManage, Blog &blog, const char *command) {
+void Book::Select_Book(const char *isbn, User &UserManage, Blog &blog , const char* command) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }

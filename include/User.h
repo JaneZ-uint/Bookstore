@@ -5,6 +5,7 @@
 #ifndef USER_H
 #define USER_H
 #include <iostream>
+#include <fstream>
 #include "Block.h"
 #include "Blog.h"
 #include "Book.h"
@@ -14,6 +15,10 @@
 #include <cstring>
 #include <string>
 #include <unordered_map>
+
+class Book;
+class BookInfo;
+class Blog;
 
 //记录用户信息
 class UserInfo {
@@ -92,6 +97,9 @@ public:
 
     //删除账户
     void Delete(const char* User_ID , Blog& blog);
+
+    //退出系统
+    void Eliminate();
 
 };
 

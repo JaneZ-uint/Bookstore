@@ -186,9 +186,10 @@ std::string Tokenscanner::cutShow(const std::string &s) {
         throw InvalidExpression();
     }
     //图书信息
+    if(s.size() < 7) {  //附加参数为空的情况
+        throw InvalidExpression();//显然不会满足
+    }
     std::string whatinfo1 = s.substr(1, 4);
-    std::string whatinfo2 = s.substr(1, 6);
-    std::string whatinfo3 = s.substr(1 , 7);
     if(whatinfo1 == "ISBN") {
         if(s[5] != '=') {
             throw InvalidExpression();
@@ -197,7 +198,11 @@ std::string Tokenscanner::cutShow(const std::string &s) {
         checkISBN(s1);
         res = s1;
         return res;
-    }else if(whatinfo1 == "name") {
+    }
+    if(s.size() == 7 || s.size() == 8) {
+        throw InvalidExpression();
+    }//到这个位置还没有被return显然已经无法满足剩下3个变量的判断了
+    if(whatinfo1 == "name") {
         if(s[5] != '=') {
             throw InvalidExpression();
         }
@@ -211,7 +216,13 @@ std::string Tokenscanner::cutShow(const std::string &s) {
         checkBooknameAuthor(s1);
         res = s1;
         return res;
-    }else if(whatinfo2 == "author") {
+    }
+    if(s.size() == 9 || s.size() == 10) {
+        throw InvalidExpression();
+    }
+    //接下来剩下的字符串长度都大于10
+    std::string whatinfo2 = s.substr(1, 6);
+    if(whatinfo2 == "author") {
         if(s[7] != '=') {
             throw InvalidExpression();
         }
@@ -225,7 +236,12 @@ std::string Tokenscanner::cutShow(const std::string &s) {
         checkBooknameAuthor(s1);
         res = s1;
         return res;
-    }else if(whatinfo3 == "keyword") {
+    }
+    if(s.size() == 11) {
+        throw InvalidExpression();
+    }
+    std::string whatinfo3 = s.substr(1 , 7);
+    if(whatinfo3 == "keyword") {
         if(s[8] != '=') {
             throw InvalidExpression();
         }
@@ -257,10 +273,10 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         throw InvalidExpression();
     }
     //图书信息
+    if(s.size() < 7) {  //附加参数为空的情况
+        throw InvalidExpression();//显然不会满足
+    }
     std::string whatinfo1 = s.substr(1, 4);
-    std::string whatinfo2 = s.substr(1, 6);
-    std::string whatinfo3 = s.substr(1 , 7);
-    std::string whatinfo4 = s.substr(1 , 5);
     if(whatinfo1 == "ISBN") {
         if(s[5] != '=') {
             throw InvalidExpression();
@@ -269,7 +285,11 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         checkISBN(s1);
         res = s1;
         return res;
-    }else if(whatinfo1 == "name") {
+    }
+    if(s.size() == 7 || s.size() == 8) {
+        throw InvalidExpression();
+    }//到这个位置还没有被return显然已经无法满足剩下3个变量的判断了
+    if(whatinfo1 == "name") {
         if(s[5] != '=') {
             throw InvalidExpression();
         }
@@ -283,7 +303,14 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         checkBooknameAuthor(s1);
         res = s1;
         return res;
-    }else if(whatinfo2 == "author") {
+    }
+    if(s.size() == 9 || s.size() == 10) {
+        throw InvalidExpression();
+    }
+    //接下来剩下的字符串长度都大于10
+    std::string whatinfo2 = s.substr(1, 6);
+    std::string whatinfo4 = s.substr(1 ,5);
+    if(whatinfo2 == "author") {
         if(s[7] != '=') {
             throw InvalidExpression();
         }
@@ -297,7 +324,22 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         checkBooknameAuthor(s1);
         res = s1;
         return res;
-    }else if(whatinfo3 == "keyword") {
+    }
+    if(whatinfo4 == "price") {
+        if(s[6] != '=') {
+            throw InvalidExpression();
+        }
+        if(s[s.size() - 3] != '.') {
+            throw InvalidExpression();
+        }
+        std::string s1 = s.substr(7 , s.size() - 7);
+        return s1;
+    }
+    if(s.size() == 11) {
+        throw InvalidExpression();
+    }
+    std::string whatinfo3 = s.substr(1 , 7);
+    if(whatinfo3 == "keyword") {
         if(s[8] != '=') {
             throw InvalidExpression();
         }
@@ -308,16 +350,9 @@ std::string Tokenscanner::cutModify(const std::string &s) {
             throw InvalidExpression();
         }
         std::string s1 = s.substr(10 , s.size() - 11);
-        checkKeywordAll(s1);
+        checkKeyWordSingle(s1);
         res = s1;
         return s1;
-    }else if(whatinfo4 == "price") {
-        if(s[6] != '=') {
-            throw  InvalidExpression();
-        }
-        std::string s1 = s.substr(7 , s.size() - 7);
-        s1 = res;
-        return res;
     }
     throw InvalidExpression();
 }

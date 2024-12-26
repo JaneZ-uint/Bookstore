@@ -14,6 +14,8 @@
 #include "User.h"
 #include "MemoryRiver.h"
 
+class User;
+
 //财务相关信息
 class FinanceInfo {
     friend class Finance;

@@ -11,7 +11,7 @@ const int Block_size = 500;  // 块长可能需要调整
 const int Key_size = 71; // 键的长度固定为 71 字节
 
 // 定义模板参数
-template <int BlockSize = Block_size, int KeySize = Key_size, typename ValueType>
+template <int BlockSize = Block_size, int KeySize = Key_size, typename ValueType = int>
 class Block {
 private:
     using arr = std::array<std::pair<char[KeySize + 1], ValueType>, BlockSize>; // 键为 char[KeySize], 值为 ValueType
@@ -333,6 +333,23 @@ public:
         }
         file2.close();
         return result; // 返回匹配结果的 vector
+    }
+
+    std::vector<ValueType> find_all() {
+        file2.open(file2_name, std::ios::binary | std::ios::in | std::ios::out);
+        node* current = Head->next;
+        std::vector<ValueType> result;
+        while (current != nullptr) {
+            arr a;
+            file2.seekg(current->info.indexnum * sizeof(arr));
+            file2.read(reinterpret_cast<char*>(&a), sizeof(arr));
+            for (int i = 0; i < current->info.size; i++) {
+                result.push_back(a[i].second);
+            }
+            current = current->next;
+        }
+        file2.close();
+        return result;
     }
 };
 
