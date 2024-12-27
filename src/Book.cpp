@@ -258,7 +258,7 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
         Book_Author.remove(result[0].Author , result[0]);
     }
     //关键词删除先放后面
-    if(isbn != nullptr) {
+    if(strcmp(isbn , "nullptr") != 0) {
         //说明会对isbn号进行修改
         if(strcmp(isbn , nowUser.selectedISBN) == 0) {
             throw InvalidExpression();
@@ -266,18 +266,18 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
         //修改isbn号
         strcpy(MODIFIED.ISBN , isbn);
     }
-    if(bookname != nullptr) {
+    if(strcmp(bookname , "nullptr") != 0) {
         //对书名进行修改
         strcpy(MODIFIED.BookName , bookname);
     }
-    if(Author != nullptr) {
+    if(strcmp(Author , "nullptr") != 0) {
         //对作者进行修改
         strcpy(MODIFIED.Author , Author);
     }
     if(price != -1) {
         MODIFIED.Price = price;
     }
-    if(all_keywords != nullptr) {
+    if(strcmp(all_keywords ,  "nullptr") != 0) {
         //需要判断keyword是否包含重复信息段
         //修改后的所有关键词
         std::vector<std::string> Result = SplitKeywords(all_keywords);

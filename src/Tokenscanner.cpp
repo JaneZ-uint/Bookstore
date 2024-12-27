@@ -5,7 +5,7 @@
 
 void Tokenscanner::TokenSeparator(const std::string input, std::vector<std::string> &result) {
     std::string a;
-    for(int i = 0 ; i < input.size() ; i++) {
+    for(int i = 0 ; i <= input.size() ; i++) {
         if(i == input.size() || input[i] == ' ') {
             //以空格作为分割单位
             if(!a.empty()) {

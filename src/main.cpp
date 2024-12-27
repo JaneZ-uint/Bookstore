@@ -230,10 +230,11 @@ bool processline(std::string line,Book &bookmanage,User &usermanage,Finance &fin
         bool isa = false;
         bool isk = false;
         bool isp = false;
-        char* IS = nullptr;
-        char* n = nullptr;
-        char* a = nullptr;
-        char* k = nullptr;
+        char ISBN[71] = {'\0'};
+        char NAME[71] = {'\0'};
+        char AUTHOR[71] = {'\0'};
+        char KEYWORD[71] = {'\0'};
+
         double PRIce = -1;
         for(int i = 1; i < Parse.size() ; i++) {
             std::string s = Tokenscanner::cutModify(Parse[i]);
@@ -243,36 +244,29 @@ bool processline(std::string line,Book &bookmanage,User &usermanage,Finance &fin
                 }
                 isI = true;
                 //可以进行修改ISBN的操作了
-                char ISBN[71] = {'\0'};
                 strcpy(ISBN , s.c_str());
-                strcpy(IS , ISBN);
             }else if(Parse[i][1] == 'n') {
                 if(isn) {
                     throw InvalidExpression();
                 }
                 isn = true;
                 //可以进行修改name的操作了
-                char NAME[71] = {'\0'};
                 strcpy(NAME , s.c_str());
-                strcpy(n , NAME);
             }else if(Parse[i][1] == 'a') {
                 if(isa) {
                     throw InvalidExpression();
                 }
                 isa = true;
                 //可以进行修改作者名的操作了
-                char AUTHOR[71] = {'\0'};
+
                 strcpy(AUTHOR  ,s.c_str());
-                strcpy(a, AUTHOR);
             }else if(Parse[i][1] == 'k') {
                 if(isk) {
                     throw InvalidExpression();
                 }
                 isk = true;
                 //可以进行修改关键词的操作了
-                char KEYWORD[71] = {'\0'};
                 strcpy(KEYWORD, s.c_str());
-                strcpy(k , KEYWORD);
             }else if(Parse[i][1] == 'p') {
                 if(isp) {
                     throw InvalidExpression();
@@ -285,7 +279,19 @@ bool processline(std::string line,Book &bookmanage,User &usermanage,Finance &fin
                 throw InvalidExpression();
             }
         }
-        bookmanage.modify(IS , n , a, k ,PRIce , usermanage, blogmanage ,line.c_str() );
+        if(!isI) {
+            strcpy(ISBN , "nullptr");
+        }
+        if(!isn) {
+            strcpy(NAME , "nullptr");
+        }
+        if(!isa) {
+            strcpy(AUTHOR , "nullptr");
+        }
+        if(!isk) {
+            strcpy(KEYWORD , "nullptr");
+        }
+        bookmanage.modify(ISBN , NAME, AUTHOR, KEYWORD ,PRIce , usermanage, blogmanage ,line.c_str() );
     }else if(command1 == "import") {
         if(Parse.size() != 3) {
             throw InvalidExpression();
@@ -311,7 +317,8 @@ bool processline(std::string line,Book &bookmanage,User &usermanage,Finance &fin
         if(Parse.size() != 1) {
             throw InvalidExpression();
         }
-        blogmanage.ReadAll(usermanage);
+        //TODO
+        //blogmanage.ReadAll(usermanage);
     }else {
         throw InvalidExpression();
     }

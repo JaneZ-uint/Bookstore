@@ -154,10 +154,6 @@ void User::logout(Book &book , Blog &blog) {
     if(LogStack.empty()) {
         throw InvalidExpression();
     }
-    //游客状态不存在
-    if(currentlevel == 0) {
-        throw InvalidExpression();
-    }
     //从登录栈中取出最后一个元素
     UserInfo currentLogouter = LogStack.back();
     std::string ID;
