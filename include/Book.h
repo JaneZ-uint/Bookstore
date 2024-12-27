@@ -66,9 +66,11 @@ private:
 
 public:
     //当前选中的图书的全部信息
+    //根据登录栈中当前最后一个账户是否选择 选择了什么来决定
+    //logout select 等操作时不断更新这个selected
     BookInfo selected;
     Book():Book_ISBN("ISBN1", "ISBN2"), Book_Name("name1","name2"),Book_Author("author1","author2"),Book_keyword("keyword1","keyword2") {}
-    ~Book() = default;
+    ~Book();
 
     //检索图书
     void showInfo(const char* isbn , const char* bookname , const char* Author, const char* singlekeyword,User& UserManage, Blog& blog);

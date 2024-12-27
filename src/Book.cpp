@@ -47,6 +47,14 @@ bool BookInfo::operator>=(const BookInfo &other) const {
     return false;
 }
 
+Book::~Book() {
+    Book_ISBN.ELIMINATE();
+    Book_Name.ELIMINATE();
+    Book_Author.ELIMINATE();
+    Book_keyword.ELIMINATE();
+}
+
+
 void Book::showInfo(const char *isbn, const char *bookname, const char *Author, const char *singlekeyword, User &UserManage, Blog &blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();

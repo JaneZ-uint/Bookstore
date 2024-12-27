@@ -165,6 +165,7 @@ public:
     }
 
     ~Block() {
+        //析构函数或许应该加入清空文件的部分 以便于在程序结束时清空文件 debug的时候不会出现文件内容的杂糅
         file1.open(file1_name, std::ios::binary | std::ios::in | std::ios::out);
         node* current = Head->next;
         delete Head;
@@ -177,6 +178,8 @@ public:
     }
 
     // insert操作
+    // 这里的bool类型是否必要
+    // 从我程序的整体操作上来看 更多的是在进行find返回的vector是否是空的来判断
     bool insert(const char* key, const ValueType& value) {
         file2.open(file2_name, std::ios::in | std::ios::out | std::ios::binary);
         node* current = Head->next;
@@ -350,6 +353,11 @@ public:
         }
         file2.close();
         return result;
+    }
+
+    void ELIMINATE() {
+        file1.clear();
+        file2.clear();
     }
 };
 

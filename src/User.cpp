@@ -110,7 +110,9 @@ User::User():UserBlock("User1", "User2"){
     //插入店主
 }
 
-User::~User() = default;
+User::~User(){
+    UserBlock.ELIMINATE();
+}
 
 //登录账户操作
 void User::su(const char *User_ID, const char *password, Blog &blog) {

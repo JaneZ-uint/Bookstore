@@ -32,13 +32,12 @@ private:
     char UserID[71] = {'\0'}; //ID
     char UserName[71] = {'\0'}; //用户名
     char Password[71] = {'\0'};  //密码
-    char SpecialInfo[71] = {'\0'}; //UserID对映的各种个人信息
     int level  = 0;  //权限等级
-    bool selected = false; //不涉及选择图书
+    bool selected = false; //当前账户有没有选择图书
 
 public:
     char selectedISBN[71] = {'\0'};
-
+    //选择的是什么selectedISBN 如果每选那么默认为{‘\0}
     UserInfo() = default;
     //构造函数
     UserInfo(const char* User_ID ,const char* User_name , const char* password , int LEVEL ) {
