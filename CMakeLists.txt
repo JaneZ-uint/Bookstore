@@ -17,4 +17,5 @@ add_executable(Bookstore_2024 src/main.cpp
         src/Error.cpp
         src/User.cpp
         src/Tokenscanner.cpp
+        include/MemoryRiver.h
 )
