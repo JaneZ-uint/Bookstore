@@ -6,14 +6,14 @@
 #include <ranges>
 
 //重载运算符
-bool BookInfo::operator==(const BookInfo &other) const {
-    if(strcmp(ISBN , other.ISBN) == 0) {
+bool BookInfo::operator == (const BookInfo &other) const {
+    if(strcmp(ISBN , other.ISBN) == 0 && strcmp(BookName , other.BookName) == 0 && strcmp(Author , other.Author) == 0 && strcmp(KeyWord , other.KeyWord) == 0 && Quantity == other.Quantity && Price == other.Price && other.Importprice == Importprice) {
         return true;
     }
     return false;
 }
 
-bool BookInfo::operator<(const BookInfo &other) const {
+bool BookInfo::operator < (const BookInfo &other) const {
     if(strcmp(ISBN , other.ISBN) < 0) {
         return true;
     }
@@ -21,7 +21,7 @@ bool BookInfo::operator<(const BookInfo &other) const {
 }
 
 bool BookInfo::operator<=(const BookInfo &other) const {
-    if(strcmp(ISBN , other.ISBN) == 0) {
+    if(strcmp(ISBN , other.ISBN) == 0 && strcmp(BookName , other.BookName) == 0 && strcmp(Author , other.Author) == 0 && strcmp(KeyWord , other.KeyWord) == 0 && Quantity == other.Quantity && Price == other.Price && other.Importprice == Importprice) {
         return true;
     }
     if(strcmp(ISBN , other.ISBN) < 0) {
@@ -38,7 +38,7 @@ bool BookInfo::operator>(const BookInfo &other) const {
 }
 
 bool BookInfo::operator>=(const BookInfo &other) const {
-    if(strcmp(ISBN , other.ISBN) == 0) {
+    if(strcmp(ISBN , other.ISBN) == 0 && strcmp(BookName , other.BookName) == 0 && strcmp(Author , other.Author) == 0 && strcmp(KeyWord , other.KeyWord) == 0 && Quantity == other.Quantity && Price == other.Price && other.Importprice == Importprice) {
         return true;
     }
     if(strcmp(ISBN , other.ISBN) > 0) {
@@ -71,7 +71,7 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
             return;
         }
         for(auto it : result) {
-            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
+            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
         }
         return;
     }
@@ -82,7 +82,7 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
             return;
         }
         for(auto it : result) {
-            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
+            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
         }
         return;
     }
@@ -93,7 +93,7 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
             return ;
         }
         for(auto it : result) {
-            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
+            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
         }
         return;
     }
@@ -104,7 +104,7 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
             return;
         }
         for(auto it : result) {
-            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
+            std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
         }
         return;
     }
@@ -121,8 +121,8 @@ void Book::showeverything(User &UserManage, Blog &blog) {
         throw InvalidExpression();
     }
     std::vector<BookInfo> result = Book_ISBN.find_all();
-    for(auto &it: result) {
-        std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<it.Price<<'\t'<<it.Quantity<<'\n';
+    for(auto it : result) {
+        std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
     }
 
     //TODO 完成日志记录
@@ -137,10 +137,10 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         throw InvalidExpression();
     }
     std::vector<BookInfo> result = Book_ISBN.find(isbn);
-    BookInfo Purchase = result[0];
     if(result.empty()) {
         throw InvalidExpression();
     }
+    BookInfo Purchase = result[0];
     if(QUANT <= 0) {
         throw InvalidExpression();
     }
@@ -157,7 +157,13 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         Book_Author.remove(Purchase.Author, Purchase);
     }
     if(strcmp(Purchase.KeyWord , "'\0") != 0) {
-        Book_keyword.remove(Purchase.KeyWord, Purchase);
+        std::vector<std::string> selectedKEYWORD = SplitKeywords(Purchase.KeyWord);
+        for(auto &it : selectedKEYWORD) {
+            //先从string转化为char数组
+            char a[71] = {'\0'};
+            strcpy(a, it.c_str());
+            Book_keyword.remove(a, result[0]);
+        }
     }
     Purchase.Quantity -= QUANT; //更新库存数量
     double PRICE = Purchase.Price ;
@@ -182,7 +188,12 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         Book_Author.insert(Purchase.Author , Purchase);
     }
     if(strcmp(Purchase.KeyWord , "'\0") != 0) {
-        Book_keyword.insert(isbn , Purchase);
+        std::vector<std::string> Result = SplitKeywords(result[0].KeyWord);
+        for(auto &it: Result) {
+            char a[71] = {'\0'};
+            strcpy(a , it.c_str());
+            Book_keyword.insert(a , Purchase);
+        }
     }
 
     //TODO 完成日志记录
@@ -244,36 +255,51 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
         throw InvalidExpression();
     }
     UserInfo nowUser = UserManage.LogStack.back();
+    //UserManage.LogStack.pop_back();
     if(nowUser.level < 3) {
+        //UserManage.LogStack.push_back(nowUser);
         throw InvalidExpression();
     }
     if(!nowUser.selected) {
+        //UserManage.LogStack.push_back(nowUser);
         throw InvalidExpression();
     }
     //先统一更新选中图书的信息 重新建一个ModifiedBook
     //或许我还需要在ISBN->bookInfo中找到对应的BookINFO
     //满足条件的只有一个
+    char original[71] = {'\0'};
+    strcpy(original , nowUser.selectedISBN);
     std::vector<BookInfo> result = Book_ISBN.find(nowUser.selectedISBN);
     BookInfo MODIFIED = result[0];
-    Book_ISBN.remove(nowUser.selectedISBN , result[0]);
-    //如果存在相应的只写信息 就在相应的文件中删除
-    //等等 这样真的合理吗 好像不是很合理啊 我似乎应该把修改了什么信息放在函数的形式参数中
-    //但不管我又没有修改名字作者或是关键词 我都需要先把他们从块状链表中移除
-    if(strcmp(result[0].BookName , "\0") != 0) {
-        Book_Name.remove(result[0].BookName, result[0]);
+    if(strcmp(all_keywords ,  "nullptr") != 0) {
+        std::vector<std::string> selectedKEYWORD1 = SplitKeywords(all_keywords);
     }
-    if(strcmp(result[0].Author , "\0") != 0) {
-        Book_Author.remove(result[0].Author , result[0]);
-    }
-    //关键词删除先放后面
     if(strcmp(isbn , "nullptr") != 0) {
         //说明会对isbn号进行修改
         if(strcmp(isbn , nowUser.selectedISBN) == 0) {
             throw InvalidExpression();
         }
+        std::vector<BookInfo> check = Book_ISBN.find(isbn);
+        if(!check.empty()) {
+            throw InvalidExpression();
+        }
+        Book_ISBN.remove(nowUser.selectedISBN , MODIFIED);
         //修改isbn号
         strcpy(MODIFIED.ISBN , isbn);
+        strcpy(nowUser.selectedISBN , isbn);
+    }else {
+        Book_ISBN.remove(nowUser.selectedISBN , MODIFIED);
     }
+    //如果存在相应的只写信息 就在相应的文件中删除
+    //等等 这样真的合理吗 好像不是很合理啊 我似乎应该把修改了什么信息放在函数的形式参数中
+    //但不管我又没有修改名字作者或是关键词 我都需要先把他们从块状链表中移除
+    if(strcmp(MODIFIED.BookName , "\0") != 0) {
+        Book_Name.remove(MODIFIED.BookName, result[0]);
+    }
+    if(strcmp(result[0].Author , "\0") != 0) {
+        Book_Author.remove(result[0].Author , result[0]);
+    }
+    //关键词删除先放后面
     if(strcmp(bookname , "nullptr") != 0) {
         //对书名进行修改
         strcpy(MODIFIED.BookName , bookname);
@@ -321,6 +347,13 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
     if(strcmp(MODIFIED.Author , "\0") != 0) {
         Book_Author.insert(MODIFIED.Author , MODIFIED);
     }
+    UserManage.LogStack.pop_back();
+    UserManage.LogStack.push_back(nowUser);
+    for(auto &it : UserManage.LogStack) {
+        if(strcmp(it.selectedISBN , original) == 0) {
+            strcpy(it.selectedISBN , nowUser.selectedISBN);
+        }
+    }
 
     //TODO 完成日志部分记录
 }
@@ -330,11 +363,10 @@ void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &m
         throw InvalidExpression();
     }
     UserInfo nowUser = UserManage.LogStack.back();
-    BookInfo tmp  = selected;
-    if(nowUser.level < 3) {
+    if(!nowUser.selected) {
         throw InvalidExpression();
     }
-    if(!nowUser.selected) {
+    if(nowUser.level < 3) {
         throw InvalidExpression();
     }
     if(QUANT <= 0) {
@@ -343,29 +375,50 @@ void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &m
     if(COST <= 0) {
         throw InvalidExpression();
     }
-    selected.Quantity += QUANT;
+    std::vector<BookInfo> result = Book_ISBN.find(nowUser.selectedISBN);
+    Book_ISBN.remove(selected.ISBN , result[0]);
+    if(strcmp(result[0].BookName , "\0") != 0) {
+        Book_Name.remove(result[0].BookName, result[0]);
+    }
+    if(strcmp(result[0].Author , "\0") != 0) {
+        Book_Author.remove(result[0].Author , result[0]);
+    }
+    if(strcmp(result[0].KeyWord, "\0") != 0) {
+        std::vector<std::string> selectedKEYWORD = SplitKeywords(result[0].KeyWord);
+        for(auto &it : selectedKEYWORD) {
+            //先从string转化为char数组
+            char a[71] = {'\0'};
+            strcpy(a, it.c_str());
+            Book_keyword.remove(a, result[0]);
+        }
+    }
+
+    result[0].Quantity += QUANT;
     double cost = COST / QUANT;
 
-    FinanceInfo INFORMATION(selected.Price , cost , QUANT , false ,nowUser.UserID ,nowUser.selectedISBN,COST);
-    int totalCount ;
-    totalCount++;
+    FinanceInfo INFORMATION(result[0].Price , cost , QUANT , false ,nowUser.UserID ,nowUser.selectedISBN,COST);
+    int totalCount = money.FinanceCount();
+    //TODO 需要修改
+    totalCount ++;
     money.FinanceReport.write_info(totalCount , 1);
     money.FinanceReport.write(INFORMATION,sizeof(FinanceInfo)*(totalCount - 1) + 4);
-    selected.Importprice = cost;
-    Book_ISBN.remove(selected.ISBN , tmp);
-    Book_ISBN.insert(selected.ISBN, selected);
-    if(strcmp(selected.BookName , "\0") != 0) {
-        Book_Name.remove(selected.ISBN , tmp);
-        Book_Name.insert(selected.ISBN , selected);
-    }
-    if(strcmp(selected.Author , "\0") != 0) {
-        Book_Name.remove(selected.Author , tmp);
-        Book_Name.insert(selected.Author , selected);
-    }
-    if(strcmp(selected.KeyWord, "\0") != 0) {
-        Book_Name.remove(selected.KeyWord , tmp);
-        Book_Name.insert(selected.KeyWord , selected);
-    }
 
+    result[0].Importprice = cost;
+
+    Book_ISBN.insert(selected.ISBN, result[0]);
+    if(strcmp(result[0].BookName , "\0") != 0) {
+        Book_Name.insert(result[0].BookName , result[0]);
+    }
+    if(strcmp(result[0].Author , "\0") != 0) {
+        Book_Author.insert(result[0].Author , result[0]);
+    }
+    if(strcmp(result[0].KeyWord, "\0") != 0) {
+        std::vector<std::string> Result = SplitKeywords(result[0].KeyWord);
+        for(auto &it: Result) {
+            char a[71] = {'\0'};
+            strcpy(a , it.c_str());
+            Book_keyword.insert(a , result[0]);
+        }
+    }
     //TODO 完成日志记录
 }

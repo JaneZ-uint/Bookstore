@@ -6,7 +6,7 @@
 
 //重载运算符 用于块状链表
 bool UserInfo::operator==(const UserInfo &other) const {
-    if(level == other.level && strcmp(UserName  ,other.UserName) && strcmp(Password  ,other.Password)) {
+    if(level == other.level && strcmp(UserName  ,other.UserName) == 0 && strcmp(Password  ,other.Password) == 0) {
         return true;
     }
     return false;
@@ -33,7 +33,7 @@ bool UserInfo::operator<(const UserInfo &other) const {
 }
 
 bool UserInfo::operator<=(const UserInfo &other) const {
-    if(level == other.level && strcmp(UserName  ,other.UserName) && strcmp(Password  ,other.Password)) {
+    if(level == other.level && strcmp(UserName  ,other.UserName)  == 0 && strcmp(Password  ,other.Password) == 0) {
         return true;
     }
     if(level < other.level) {
@@ -76,7 +76,7 @@ bool UserInfo::operator>(const UserInfo &other) const {
 }
 
 bool UserInfo::operator>=(const UserInfo &other) const {
-    if(level == other.level && strcmp(UserName  ,other.UserName) && strcmp(Password  ,other.Password)) {
+    if(level == other.level && strcmp(UserName  ,other.UserName) == 0 && strcmp(Password  ,other.Password) == 0) {
         return true;
     }
 
@@ -100,7 +100,7 @@ bool UserInfo::operator>=(const UserInfo &other) const {
 }
 
 
-User::User():UserBlock("User1", "User2"){
+User::User():UserBlock("User1.txt", "User2.txt"){
     const char* username = "JaneZ";
     const char* password = "sjtu";
     const char* userid = "root";
@@ -127,7 +127,7 @@ void User::su(const char *User_ID, const char *password, Blog &blog) {
     if(password != nullptr && strcmp(password , suUser.Password) != 0) {
         throw InvalidExpression();
     }
-    UserBlock.remove(User_ID , suUser);
+
     //更新当前账户系统的用户
     currentlevel = suUser.level;
 
@@ -136,16 +136,8 @@ void User::su(const char *User_ID, const char *password, Blog &blog) {
     //当前账户处于登录状态
     Log_Map[ID]++;
 
-    //处理选择情况
-    suUser.selected = false;
-    char isbn[71] = {'\0'};
-    strcpy(suUser.selectedISBN , isbn);
-
     //更新登录栈
     LogStack.push_back(suUser);
-
-    //更新块状链表
-    UserBlock.insert(User_ID , suUser);
 
     Information content(User_ID , "su" , suUser.level);
     blog.WriteBlog(content);
@@ -173,9 +165,12 @@ void User::logout(Book &book , Blog &blog) {
         //更新当前账户
         UserInfo newUser = LogStack.back();
         currentlevel = newUser.level;
-
-        std::vector<BookInfo> nextone = book.Book_ISBN.find(newUser.selectedISBN);
-        book.selected = nextone[0];
+        if(newUser.selected) {
+            std::vector<BookInfo> nextone = book.Book_ISBN.find(newUser.selectedISBN);
+            if(!nextone.empty()){
+                book.selected = nextone[0];
+            }
+        }
     }
 
     Information content(currentLogouter.UserID ,"logout" , currentLogouter.level);
@@ -184,7 +179,8 @@ void User::logout(Book &book , Blog &blog) {
 void User::Register(const char *User_ID, const char *password, const char *user_name, Blog &blog) {
     //新创建账户
     UserInfo newUser(User_ID,user_name , password , 1);
-    if(!UserBlock.insert(User_ID , newUser)) {
+    bool flag = UserBlock.insert(User_ID , newUser);
+    if(!flag) {
         throw InvalidExpression();
     }
     Information content(User_ID , "register" , 0);

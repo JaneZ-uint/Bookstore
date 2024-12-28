@@ -189,17 +189,17 @@ public:
         tmp.second = value;
         arr a;
         while (current != nullptr) {
-            if (tmp <= current->info.maxele || current->next == nullptr) {
+            if (smallerequal(tmp , current->info.maxele)  || current->next == nullptr) {
                 file2.seekg(current->info.indexnum * sizeof(arr));
                 file2.read(reinterpret_cast<char*>(&a), sizeof(arr));
                 int i;
                 // 顺序查找版的 lowerbound
                 for (i = 0; i < current->info.size; i++) {
-                    if (a[i] >= tmp) {
+                    if (largerequal(a[i] , tmp)) {
                         break;
                     }
                 }
-                if (a[i] == tmp) {
+                if (equal(a[i] , tmp)) {
                     file2.close();
                     return false; // 键已经存在，插入失败
                 } else {
@@ -261,12 +261,12 @@ public:
         tmp.second = value;
         while (current->next != nullptr) {
             // 如果在这个块中
-            if (current->next->info.minele <= tmp && current->next->info.maxele >= tmp) {
+            if (smallerequal(current->next->info.minele , tmp)  && largerequal(current->next->info.maxele , tmp)) {
                 arr a;
                 file2.seekg(current->next->info.indexnum * sizeof(arr));
                 file2.read(reinterpret_cast<char*>(&a), sizeof(arr));
                 for (int i = 0; i < current->next->info.size; i++) {
-                    if (a[i] == tmp) {
+                    if (equal(a[i] , tmp)) {
                         // 如果当前块中只有一个元素 需要删除空块
                         if (current->next->info.size == 1) {
                             node* t = current->next;
@@ -278,7 +278,7 @@ public:
                                 a[j - 1].first[KeySize] = '\0';
                                 a[j - 1].second = a[j].second;
                             }
-                            current->next->info.size--;
+                            current->next->info.size --;
                             // 更新最小元素
                             strncpy(current->next->info.minele.first, a[0].first, KeySize);
                             current->next->info.minele.first[KeySize] = '\0';

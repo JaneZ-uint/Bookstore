@@ -73,10 +73,7 @@ double Tokenscanner::StringToDouble(const std::string &s) {
         throw InvalidExpression();
     }
     for(int i = 0 ; i < s.size() ; i ++) {
-        if(s[i] >= '0' && s[i] <= '9') {
-            continue;
-        }
-        if(i == s.size() - 3 && s[i] == '.') {
+        if((s[i] >= '0' && s[i] <= '9')|| s[i] == '.') {
             continue;
         }
         throw InvalidExpression();
@@ -286,10 +283,21 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         res = s1;
         return res;
     }
-    if(s.size() == 7 || s.size() == 8) {
+    if(s.size() == 7 ) {
         throw InvalidExpression();
     }//到这个位置还没有被return显然已经无法满足剩下3个变量的判断了
-    if(whatinfo1 == "name") {
+    std::string whatinfo4 = s.substr(1 ,5);
+    if(whatinfo4 == "price") {
+        if(s[6] != '=') {
+            throw InvalidExpression();
+        }
+        std::string s1 = s.substr(7 , s.size() - 7);
+        return s1;
+    }
+    if(s.size() == 8 ) {
+        throw InvalidExpression();
+    }
+    if(whatinfo1 == "name" ) {
         if(s[5] != '=') {
             throw InvalidExpression();
         }
@@ -309,7 +317,6 @@ std::string Tokenscanner::cutModify(const std::string &s) {
     }
     //接下来剩下的字符串长度都大于10
     std::string whatinfo2 = s.substr(1, 6);
-    std::string whatinfo4 = s.substr(1 ,5);
     if(whatinfo2 == "author") {
         if(s[7] != '=') {
             throw InvalidExpression();
@@ -324,16 +331,6 @@ std::string Tokenscanner::cutModify(const std::string &s) {
         checkBooknameAuthor(s1);
         res = s1;
         return res;
-    }
-    if(whatinfo4 == "price") {
-        if(s[6] != '=') {
-            throw InvalidExpression();
-        }
-        if(s[s.size() - 3] != '.') {
-            throw InvalidExpression();
-        }
-        std::string s1 = s.substr(7 , s.size() - 7);
-        return s1;
     }
     if(s.size() == 11) {
         throw InvalidExpression();
@@ -350,7 +347,7 @@ std::string Tokenscanner::cutModify(const std::string &s) {
             throw InvalidExpression();
         }
         std::string s1 = s.substr(10 , s.size() - 11);
-        checkKeyWordSingle(s1);
+        checkKeywordAll(s1);
         res = s1;
         return s1;
     }

@@ -29,7 +29,7 @@ private:
     char Author[71] = {'\0'};
     char KeyWord[71] = {'\0'};
     int Quantity = 0;
-    double Price = -1; //售价
+    double Price = 0; //售价
     double Importprice = 0; // 进价
     bool hasindex = false; //判断当前图书是否具有关键字
 public:
@@ -69,7 +69,7 @@ public:
     //根据登录栈中当前最后一个账户是否选择 选择了什么来决定
     //logout select 等操作时不断更新这个selected
     BookInfo selected;
-    Book():Book_ISBN("ISBN1", "ISBN2"), Book_Name("name1","name2"),Book_Author("author1","author2"),Book_keyword("keyword1","keyword2") {}
+    Book():Book_ISBN("ISBN1.txt", "ISBN2.txt"), Book_Name("name1.txt","name2.txt"),Book_Author("author1.txt","author2.txt"),Book_keyword("keyword1.txt","keyword2.txt") {}
     ~Book();
 
     //检索图书
