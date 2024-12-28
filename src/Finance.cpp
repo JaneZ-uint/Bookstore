@@ -44,7 +44,7 @@ void Finance::ShowFinance(const int count, User &UserManage) {
             outcome += target[i].money;
         }
     }
-    std::cout<<"+"<<std::fixed<<std::setprecision(2)<<income<<" "<<"-"<<std::fixed<<std::setprecision(2)<<outcome<<'\n';
+    std::cout<<"+ "<<std::fixed<<std::setprecision(2)<<income<<" "<<"- "<<std::fixed<<std::setprecision(2)<<outcome<<'\n';
     delete []target;
 }
 
