@@ -98,8 +98,6 @@ void Tokenscanner::checkIDPassword(const std::string &s) {
             continue;
         }else if(s[i] == '_') {
             continue;
-        }else if(s[i] == '\r') {
-            continue;
         }
         throw InvalidExpression();
     }
@@ -111,6 +109,11 @@ void Tokenscanner::checkIDPassword(const std::string &s) {
 void Tokenscanner::checkUsername(const std::string &s) {
     if(s.empty() ||s.size() > 30) {
         throw InvalidExpression();
+    }
+    for(int i = 0 ; i < s.size() ; i++) {
+        if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+            throw InvalidExpression();
+        }
     }
 }
 
@@ -133,6 +136,11 @@ void Tokenscanner::checkISBN(const std::string &s) {
     if(s.size() > 20) {
         throw InvalidExpression();
     }
+    for(int i = 0 ; i < s.size() ; i++) {
+        if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+            throw InvalidExpression();
+        }
+    }
 }
 
 //检查Bookname Author
@@ -144,6 +152,8 @@ void Tokenscanner::checkBooknameAuthor(const std::string &s) {
     }
     for(int i = 0 ; i < s.size() ; i++) {
         if(s[i] == '"') {
+            throw InvalidExpression();
+        }else if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
@@ -163,6 +173,8 @@ void Tokenscanner::checkKeyWordSingle(const std::string &s) {
         if(s[i] == '"') {
             throw InvalidExpression();
         }else if(s[i] == '|') {
+            throw InvalidExpression();
+        }else if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
