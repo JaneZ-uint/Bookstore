@@ -1,4 +1,3 @@
-#include <complex.h>
 #include <iostream>
 #include "../include/Block.h"
 #include "../include/Blog.h"
@@ -16,6 +15,7 @@ int main() {
     Finance FinanceManage; //管理财务系统
     Blog BlogManage; //管理日志系统
     std::string command;
+
     while(true) {
         try {
             if(!getline(std::cin , command)) {

@@ -7,7 +7,7 @@
 #include <iomanip>
 
 Finance::Finance() {
-    FinanceReport.initialise("FinanceFile");
+    FinanceReport.initialise("FinanceFile.txt");
     FinanceReport.clear();
 }
 
@@ -36,7 +36,7 @@ void Finance::ShowFinance(const int count, User &UserManage) {
     double income = 0.00;
     double outcome = 0.00;
     auto *target = new FinanceInfo[count];
-    FinanceReport.read(target[0] , 4+sizeof(FinanceInfo)*(total - count),count);
+    FinanceReport.read(target[0] , 4 + sizeof(FinanceInfo)*(total - count),count);
     for(int i = 0 ;i < count ; i++) {
         if(target[i].state) {
             income += target[i].money;
