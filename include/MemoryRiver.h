@@ -28,10 +28,14 @@ public:
 
     void initialise(string FN = "") {
         if (FN != "") file_name = FN;
-        file.open(file_name, std::ios::out);
-        int tmp = 0;
-        for (int i = 0; i < info_len; ++i)
-            file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
+        file.open(file_name, std::ios::in|std::ios::out);
+        if(!file) {
+            file.open(file_name, std::ios::out);
+            int tmp = 0;
+            for (int i = 0; i < info_len; ++i)
+                file.write(reinterpret_cast<char *>(&tmp), sizeof(int));
+
+        }
         file.close();
     }
 

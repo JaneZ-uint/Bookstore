@@ -8,12 +8,9 @@
 
 Finance::Finance() {
     FinanceReport.initialise("FinanceFile.txt");
-    FinanceReport.clear();
 }
 
-Finance::~Finance() {
-    FinanceReport.clear();
-}
+Finance::~Finance()=default;
 
 int Finance::FinanceCount() {
     int count;
