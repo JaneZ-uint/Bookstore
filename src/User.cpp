@@ -179,10 +179,11 @@ void User::logout(Book &book , Blog &blog) {
 void User::Register(const char *User_ID, const char *password, const char *user_name, Blog &blog) {
     //新创建账户
     UserInfo newUser(User_ID,user_name , password , 1);
-    bool flag = UserBlock.insert(User_ID , newUser);
-    if(!flag) {
+    std::vector<UserInfo> check = UserBlock.find(User_ID);
+    if(!check.empty()) {
         throw InvalidExpression();
     }
+    UserBlock.insert(User_ID , newUser);
     Information content(User_ID , "register" , 0);
     blog.WriteBlog(content);
 }
@@ -205,6 +206,7 @@ void User::RevisePassword(const char *User_ID, const char *currentPassword, cons
     UserBlock.remove(User_ID , nowUser);
     strcpy(nowUser.Password , newPassword);
     UserBlock.insert(User_ID , nowUser);
+
     Information content(LogStack.back().UserID , "revise password" , currentlevel);
     blog.WriteBlog(content);
 }
@@ -224,16 +226,15 @@ void User::UserAdd(const char *User_ID, const char *password, const int LEVEL, c
     std::vector<UserInfo> result = UserBlock.find(User_ID );
     if(!result.empty()) {
         throw InvalidExpression();
-    }else {
-        UserBlock.insert(User_ID , addUser);
     }
+    UserBlock.insert(User_ID , addUser);
 
     Information content(LogStack.back().UserID , "add user" , currentlevel);
     blog.WriteBlog(content);
 }
 
 void User::Delete(const char *User_ID, Blog &blog) {
-    if(currentlevel < 7) {
+    if(currentlevel != 7) {
         throw InvalidExpression();
     }
     std::vector<UserInfo> result = UserBlock.find(User_ID);
@@ -246,6 +247,7 @@ void User::Delete(const char *User_ID, Blog &blog) {
         throw InvalidExpression();
     }
     UserBlock.remove(User_ID , result[0]);
+
     Information content(LogStack.back().UserID , "delete" , 7);
     blog.WriteBlog(content);
 }

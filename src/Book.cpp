@@ -153,10 +153,10 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         //说明当前isbn号对应的书存在书名
         Book_Name.remove(Purchase.BookName , Purchase);
     }
-    if(strcmp(Purchase.Author , "'\0") != 0) {
+    if(strcmp(Purchase.Author , "\0") != 0) {
         Book_Author.remove(Purchase.Author, Purchase);
     }
-    if(strcmp(Purchase.KeyWord , "'\0") != 0) {
+    if(strcmp(Purchase.KeyWord , "\0") != 0) {
         std::vector<std::string> selectedKEYWORD = SplitKeywords(Purchase.KeyWord);
         for(auto &it : selectedKEYWORD) {
             //先从string转化为char数组
@@ -184,11 +184,11 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         //说明当前isbn号对应的书存在书名
         Book_Name.insert(Purchase.BookName , Purchase);
     }
-    if(strcmp(Purchase.Author , "'\0") != 0) {
+    if(strcmp(Purchase.Author , "\0") != 0) {
         Book_Author.insert(Purchase.Author , Purchase);
     }
-    if(strcmp(Purchase.KeyWord , "'\0") != 0) {
-        std::vector<std::string> Result = SplitKeywords(result[0].KeyWord);
+    if(strcmp(Purchase.KeyWord , "\0") != 0) {
+        std::vector<std::string> Result = SplitKeywords(Purchase.KeyWord);
         for(auto &it: Result) {
             char a[71] = {'\0'};
             strcpy(a , it.c_str());
@@ -269,9 +269,13 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
     //满足条件的只有一个
     char original[71] = {'\0'};
     strcpy(original , nowUser.selectedISBN);
+    //肯定能找到符合条件的isbn
+    //因为即使原先不存在 在select操作中也已经插入了块状链表中
     std::vector<BookInfo> result = Book_ISBN.find(nowUser.selectedISBN);
     BookInfo MODIFIED = result[0];
+    //MODIFIED直接被修改 result[0]存储的是原本的信息
     if(strcmp(all_keywords ,  "nullptr") != 0) {
+        //其实这里是在检查传入keyword的合法性
         std::vector<std::string> selectedKEYWORD1 = SplitKeywords(all_keywords);
     }
     if(strcmp(isbn , "nullptr") != 0) {
@@ -312,6 +316,7 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
         MODIFIED.Price = price;
     }
     if(strcmp(all_keywords ,  "nullptr") != 0) {
+        //说明会对关键词进行修改
         //需要判断keyword是否包含重复信息段
         //修改后的所有关键词
         std::vector<std::string> Result = SplitKeywords(all_keywords);
@@ -337,6 +342,22 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
                 char a[71] = {'\0'};
                 strcpy(a , it.c_str());
                 Book_keyword.insert(a , MODIFIED);
+            }
+        }
+    }else {
+        //说明在这里不会对关键词进行修改
+        if(strcmp(result[0].KeyWord , "\0") != 0) {
+            //说明原来有关键词
+            std::vector<std::string> RESULT = SplitKeywords(result[0].KeyWord);
+            for(auto &it:RESULT) {
+                char a[71] = {'\0'};
+                strcpy(a, it.c_str());
+                Book_keyword.remove(a, result[0]);
+            }
+            for(auto &it:RESULT) {
+                char a[71] = {'\0'};
+                strcpy(a, it.c_str());
+                Book_keyword.insert(a, MODIFIED);
             }
         }
     }
@@ -376,6 +397,9 @@ void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &m
         throw InvalidExpression();
     }
     std::vector<BookInfo> result = Book_ISBN.find(nowUser.selectedISBN);
+    if(strcmp(result[0].KeyWord, "\0") != 0) {
+        std::vector<std::string> selectedKEYWORD1 = SplitKeywords(result[0].KeyWord);
+    }
     Book_ISBN.remove(selected.ISBN , result[0]);
     if(strcmp(result[0].BookName , "\0") != 0) {
         Book_Name.remove(result[0].BookName, result[0]);
