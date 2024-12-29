@@ -21,7 +21,7 @@ class Finance;
 class BookInfo {
     friend class Book;
     friend class User;
-    friend class Block<500 , 71 , BookInfo>;
+    friend class Block<100 , 71 , BookInfo>;
     friend class FinanceInfo;
 private:
     char ISBN[71] = {'\0'};

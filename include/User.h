@@ -67,7 +67,7 @@ class User {
     friend class Finance;
 private:
     int currentlevel = 0; // 当前用户权限
-    Block<500 , 71 , UserInfo> UserBlock; //存储当前系统内所有账户信息
+    Block<100 , 71 , UserInfo> UserBlock; //存储当前系统内所有账户信息
     std::unordered_map<std::string , int> Log_Map ; //用于存储当前用户处于登录状态的号有几个
 
 public:
