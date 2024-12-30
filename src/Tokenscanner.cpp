@@ -111,7 +111,7 @@ void Tokenscanner::checkUsername(const std::string &s) {
         throw InvalidExpression();
     }
     for(int i = 0 ; i < s.size() ; i++) {
-        if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+        if(s[i] == '\0' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
@@ -137,7 +137,7 @@ void Tokenscanner::checkISBN(const std::string &s) {
         throw InvalidExpression();
     }
     for(int i = 0 ; i < s.size() ; i++) {
-        if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+        if(s[i] == '\0' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
@@ -153,7 +153,7 @@ void Tokenscanner::checkBooknameAuthor(const std::string &s) {
     for(int i = 0 ; i < s.size() ; i++) {
         if(s[i] == '"') {
             throw InvalidExpression();
-        }else if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+        }else if(s[i] == '\0' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
@@ -174,7 +174,7 @@ void Tokenscanner::checkKeyWordSingle(const std::string &s) {
             throw InvalidExpression();
         }else if(s[i] == '|') {
             throw InvalidExpression();
-        }else if(s[i] == '\x01' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
+        }else if(s[i] == '\0' || s[i] == '\x02' || s[i] == '\x03' || s[i] == '\x04' || s[i] == '\x05' || s[i] == '\x06' || s[i] == '\a' || s[i] == '\b' || s[i] == '\t' || s[i] == '\n' || s[i] == '\v' || s[i] == '\f' || s[i] == '\r' ) {
             throw InvalidExpression();
         }
     }
