@@ -317,8 +317,7 @@ bool processline(std::string line,Book &bookmanage,User &usermanage,Finance &fin
         if(Parse.size() != 1) {
             throw InvalidExpression();
         }
-        //TODO
-        //blogmanage.ReadAll(usermanage);
+        blogmanage.ReadAll(financemanage , usermanage);
     }else {
         throw InvalidExpression();
     }

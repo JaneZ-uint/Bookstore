@@ -51,7 +51,7 @@ public:
     void ReadWorker(User& UserManage);
 
     //读取全部信息
-    void ReadAll(User& UserManage);
+    void ReadAll(Finance& financeManage , User& UserManage);
 };
 
 #endif //BLOG_H

@@ -422,7 +422,6 @@ void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &m
 
     FinanceInfo INFORMATION(result[0].Price , cost , QUANT , false ,nowUser.UserID ,nowUser.selectedISBN,COST);
     int totalCount = money.FinanceCount();
-    //TODO 需要修改
     totalCount ++;
     money.FinanceReport.write_info(totalCount , 1);
     money.FinanceReport.write(INFORMATION,sizeof(FinanceInfo)*(totalCount - 1) + 4);
