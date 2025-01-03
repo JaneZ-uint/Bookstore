@@ -4,7 +4,7 @@
 #include "../include/Blog.h"
 
 Blog::Blog() {
-    blog.initialise("blogFile.txt");
+    blog.initialise("BlogFile.txt");
 }
 
 int Blog::BlogCount() {

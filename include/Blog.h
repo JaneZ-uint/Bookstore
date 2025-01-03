@@ -19,7 +19,7 @@ class Information {
     friend class Blog;
 private:
     char UserID[71] = {'\0'};
-    char behave[100] = {'\0'};
+    char behave[200] = {'\0'};
     int level = 0;
 
 public:

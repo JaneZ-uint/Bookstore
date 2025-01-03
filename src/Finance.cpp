@@ -7,7 +7,7 @@
 #include <iomanip>
 
 Finance::Finance() {
-    FinanceReport.initialise("FinanceFile");
+    FinanceReport.initialise("Financefile.txt");
 }
 
 Finance::~Finance()=default;
