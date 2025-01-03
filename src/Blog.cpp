@@ -23,7 +23,7 @@ void Blog::ReadWorker(User &UserManage) {
         throw InvalidExpression();
     }
 
-    std::cout<<"------Welcome to JaneZ's Bookstore------"<<std::endl;
+    std::cout<<"   🎗️Welcome to JaneZ's Bookstore🎗️    "<<std::endl;
     std::cout<<"------      Employee Report       ------"<<std::endl;
     std::cout<<"The Number of Operation is "<< BlogCount()<<std::endl;
     auto* Info = new Information[BlogCount()]; // 动态分配数组
@@ -48,4 +48,6 @@ void Blog::ReadAll(Finance & FinanceManage,User &UserManage) {
     FinanceManage.ReportFinance(UserManage);
     std::cout<<"------Second Part: Employee Report------"<<std::endl;
     ReadWorker(UserManage);
+    std::cout<<"🎉 🎉 🎉 🎉 🎉 🎉 🎉 🎉 🎉 🎉 🎉 "<<std::endl;
+    std::cout<<"              🥳🥳🥳                "<<std::endl;
 }

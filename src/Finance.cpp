@@ -53,7 +53,7 @@ void Finance::ReportFinance(User &UserManage) {
     if(UserManage.LogStack.back().level != 7) {
         throw InvalidExpression();
     }
-    std::cout<<"------Welcome to JaneZ's Bookstore------"<<std::endl;
+    std::cout<<"   🎗️Welcome to JaneZ's Bookstore🎗️    "<<std::endl;
     std::cout<<"------       Finance Report       ------"<<std::endl;
     std::cout<<"The Number of Transaction is "<< FinanceCount()<<std::endl;
     auto *Info = new FinanceInfo[FinanceCount()];
