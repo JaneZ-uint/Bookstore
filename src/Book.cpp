@@ -55,7 +55,7 @@ Book::~Book() {
 }
 
 
-void Book::showInfo(const char *isbn, const char *bookname, const char *Author, const char *singlekeyword, User &UserManage, Blog &blog) {
+void Book::showInfo(const char *isbn, const char *bookname, const char *Author, const char *singlekeyword, User &UserManage, Blog &Blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -109,10 +109,14 @@ void Book::showInfo(const char *isbn, const char *bookname, const char *Author, 
         return;
     }
 
-    //TODO 完成日志记录
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Show Things About the Book" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void Book::showeverything(User &UserManage, Blog &blog) {
+void Book::showeverything(User &UserManage, Blog &Blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -125,10 +129,14 @@ void Book::showeverything(User &UserManage, Blog &blog) {
         std::cout<<it.ISBN<<'\t'<<it.BookName<<'\t'<<it.Author<<'\t'<<it.KeyWord<<'\t'<<std::fixed<<std::setprecision(2)<<it.Price<<'\t'<<it.Quantity<<'\n';
     }
 
-    //TODO 完成日志记录
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Show Everything About the Book" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance &money, Blog &blog) {
+void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance &money, Blog &Blog) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -196,10 +204,14 @@ void Book::Shopping(const char *isbn, const int QUANT, User &UserManage, Finance
         }
     }
 
-    //TODO 完成日志记录
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Buy Books" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void Book::Select_Book(const char *isbn, User &UserManage, Blog &blog , const char* command) {
+void Book::Select_Book(const char *isbn, User &UserManage, Blog &Blog , const char* command) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -222,7 +234,12 @@ void Book::Select_Book(const char *isbn, User &UserManage, Blog &blog , const ch
     nowUser.selected = true; //说明当前用户选择了图书
     strcpy(nowUser.selectedISBN , isbn);
     UserManage.LogStack.push_back(nowUser);
-    //TODO 完成日志记录
+
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Select Specific Books" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
 
@@ -248,7 +265,7 @@ std::vector<std::string> Book::SplitKeywords(const char *allkeyword) {
 }
 
 
-void Book::modify(const char *isbn, const char *bookname,const char *Author,const char *all_keywords,double price, User &UserManage, Blog &blog, const char *command) {
+void Book::modify(const char *isbn, const char *bookname,const char *Author,const char *all_keywords,double price, User &UserManage, Blog &Blog, const char *command) {
     //传入参数时， 直接把不要修改的部分赋成空指针
     //对于修改这一操作 需要把4个文件里的BookInfo全部修改
     if(UserManage.LogStack.empty()) {
@@ -376,10 +393,14 @@ void Book::modify(const char *isbn, const char *bookname,const char *Author,cons
         }
     }
 
-    //TODO 完成日志部分记录
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Modify the Book" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &money, Blog &blog, const char *command) {
+void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &money, Blog &Blog, const char *command) {
     if(UserManage.LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -443,5 +464,10 @@ void Book::ImportBook(const int QUANT, double COST, User &UserManage, Finance &m
             Book_keyword.insert(a , result[0]);
         }
     }
-    //TODO 完成日志记录
+
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(nowUser.UserID  , "Import Books" , nowUser.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }

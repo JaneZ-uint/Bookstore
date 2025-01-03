@@ -21,8 +21,6 @@ private:
     char UserID[71] = {'\0'};
     char behave[100] = {'\0'};
     int level = 0;
-    double cost = 0.00;
-    bool state = true;
 
 public:
     Information() = default;
@@ -30,22 +28,19 @@ public:
         strcpy(UserID, User_ID);
         strcpy(behave , Behave);
     }
-
-    explicit Information(const char* User_ID , const char* Behave , int Level ,double COST , bool status):level(Level),cost(COST),state(status) {
-        strcpy(UserID, User_ID);
-        strcpy(behave , Behave);
-    }
 };
 
 
 class Blog {
+    friend class Book;
+    friend class User;
 private:
     MemoryRiver<Information , 1> blog;
 public:
     Blog();
+    ~Blog() = default;
 
-    //记录博客
-    void WriteBlog(Information& info);
+    int BlogCount();
 
     //读取员工工作报告
     void ReadWorker(User& UserManage);

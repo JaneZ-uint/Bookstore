@@ -16,6 +16,7 @@ using std::ofstream;
 template<class T, int info_len = 2>
 class MemoryRiver {
     friend class Finance;
+    friend class Blog;
 private:
     /* your code here */
     fstream file;
@@ -60,7 +61,6 @@ public:
         int x;
         file.read(reinterpret_cast<char*> (&x), sizeof(int));
         file.close();
-        return;
     }
 
     void write(T &t,  int index , int size = 1) {
@@ -69,7 +69,6 @@ public:
         file.seekp(index);
         file.write(reinterpret_cast<char*>(&t),sizeofT*size);
         file.close();
-        return ;
     }
 
     void read(T &t,  int index, int size) {
@@ -78,7 +77,6 @@ public:
         file.seekg(index);
         file.read(reinterpret_cast<char*>(&t) , sizeofT*size);
         file.close();
-        return;
     }
 
     void clear() {
@@ -86,6 +84,7 @@ public:
         file.clear();
         file.close();
     }
+
 };
 
 

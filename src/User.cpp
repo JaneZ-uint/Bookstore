@@ -115,7 +115,7 @@ User::~User(){
 }
 
 //登录账户操作
-void User::su(const char *User_ID, const char *password, Blog &blog) {
+void User::su(const char *User_ID, const char *password, Blog &Blog) {
     std::vector<UserInfo> result = UserBlock.find(User_ID);
     if(result.empty()) {
         throw InvalidExpression();
@@ -139,12 +139,15 @@ void User::su(const char *User_ID, const char *password, Blog &blog) {
     //更新登录栈
     LogStack.push_back(suUser);
 
-    Information content(User_ID , "su" , suUser.level);
-    blog.WriteBlog(content);
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(User_ID  , "Su" , currentlevel);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
 //注销账户 logout
-void User::logout(Book &book , Blog &blog) {
+void User::logout(Book &book , Blog &Blog) {
     if(LogStack.empty()) {
         throw InvalidExpression();
     }
@@ -173,10 +176,14 @@ void User::logout(Book &book , Blog &blog) {
         }
     }
 
-    Information content(currentLogouter.UserID ,"logout" , currentLogouter.level);
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
+    Information content(currentLogouter.UserID  , "Logout" , currentLogouter.level);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void User::Register(const char *User_ID, const char *password, const char *user_name, Blog &blog) {
+void User::Register(const char *User_ID, const char *password, const char *user_name, Blog &Blog) {
     //新创建账户
     UserInfo newUser(User_ID,user_name , password , 1);
     std::vector<UserInfo> check = UserBlock.find(User_ID);
@@ -184,11 +191,15 @@ void User::Register(const char *User_ID, const char *password, const char *user_
         throw InvalidExpression();
     }
     UserBlock.insert(User_ID , newUser);
+
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
     Information content(User_ID , "register" , 0);
-    blog.WriteBlog(content);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void User::RevisePassword(const char *User_ID, const char *currentPassword, const char *newPassword, Blog &blog, const char *command) {
+void User::RevisePassword(const char *User_ID, const char *currentPassword, const char *newPassword, Blog &Blog, const char *command) {
     if(currentlevel == 0) {
         throw InvalidExpression();
     }
@@ -207,12 +218,15 @@ void User::RevisePassword(const char *User_ID, const char *currentPassword, cons
     strcpy(nowUser.Password , newPassword);
     UserBlock.insert(User_ID , nowUser);
 
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
     Information content(LogStack.back().UserID , "revise password" , currentlevel);
-    blog.WriteBlog(content);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
 //创建账户
-void User::UserAdd(const char *User_ID, const char *password, const int LEVEL, const char *user_name, Blog &blog, const char *command) {
+void User::UserAdd(const char *User_ID, const char *password, const int LEVEL, const char *user_name, Blog &Blog, const char *command) {
     if(currentlevel < 3) {
         throw InvalidExpression();
     }
@@ -229,11 +243,14 @@ void User::UserAdd(const char *User_ID, const char *password, const int LEVEL, c
     }
     UserBlock.insert(User_ID , addUser);
 
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
     Information content(LogStack.back().UserID , "add user" , currentlevel);
-    blog.WriteBlog(content);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
-void User::Delete(const char *User_ID, Blog &blog) {
+void User::Delete(const char *User_ID, Blog &Blog) {
     if(currentlevel != 7) {
         throw InvalidExpression();
     }
@@ -248,8 +265,11 @@ void User::Delete(const char *User_ID, Blog &blog) {
     }
     UserBlock.remove(User_ID , result[0]);
 
+    int TOTAL = Blog.BlogCount();
+    TOTAL ++;
+    Blog.blog.write_info(TOTAL , 1);
     Information content(LogStack.back().UserID , "delete" , 7);
-    blog.WriteBlog(content);
+    Blog.blog.write(content , 4 + (TOTAL - 1)*sizeof(Information));
 }
 
 void User::Eliminate() {
