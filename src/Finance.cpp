@@ -54,18 +54,22 @@ void Finance::ReportFinance(User &UserManage) {
         throw InvalidExpression();
     }
     std::cout<<"------Welcome to JaneZ's Bookstore------"<<std::endl;
-    std::cout<<"------Here is the Finance Report  ------"<<std::endl;
+    std::cout<<"------       Finance Report       ------"<<std::endl;
     std::cout<<"The Number of Transaction is "<< FinanceCount()<<std::endl;
     auto *Info = new FinanceInfo[FinanceCount()];
     FinanceReport.read(Info[0] , 4 , FinanceCount());
     for(int i = 0 ; i < FinanceCount() ; i ++) {
         std::cout<<i+1 << ". ";
         if(Info[i].state) {
-            std::cout<< "INCOME: "<<std::fixed<<std::setprecision(2)<<Info[i].money<<std::endl;
-            std::cout<< "By： "<<Info[i].UserID<<std::endl;
+            std::cout<< "Income: "<<" + "<<std::fixed<<std::setprecision(2)<<Info[i].money<<std::endl;
+            std::cout<< " Operated By： "<<Info[i].UserID<<std::endl;
+            std::cout<< " Operated BookISBN: "<<Info[i].ISBN<<std::endl;
+            std::cout<< " Quant: "<<Info[i].QUANT<<std::endl;
         }else {
-            std::cout<<"Expense: "<<std::fixed<<std::setprecision(2)<<Info[i].money<<std::endl;
-            std::cout<< "By： "<<Info[i].UserID<<std::endl;
+            std::cout<<"Expense: "<<" - "<<std::fixed<<std::setprecision(2)<<Info[i].money<<std::endl;
+            std::cout<< " Operated By： "<<Info[i].UserID<<std::endl;
+            std::cout<< " Operated BookISBN: "<<Info[i].ISBN<<std::endl;
+            std::cout<< " Quant: "<<Info[i].QUANT<<std::endl;
         }
     }
     delete []Info;

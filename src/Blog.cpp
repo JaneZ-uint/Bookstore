@@ -24,11 +24,12 @@ void Blog::ReadWorker(User &UserManage) {
     }
 
     std::cout<<"------Welcome to JaneZ's Bookstore------"<<std::endl;
-    std::cout<<"------Here is the Employee Report ------"<<std::endl;
+    std::cout<<"------      Employee Report       ------"<<std::endl;
+    std::cout<<"The Number of Operation is "<< BlogCount()<<std::endl;
     auto* Info = new Information[BlogCount()]; // 动态分配数组
     blog.read(Info[0], 4, BlogCount()); // 从文件偏移量4开始读取total条记录
     for(int i = 0 ; i < BlogCount() ; i ++) {
-        std::cout<<i+1 <<". ";
+        std::cout<<i + 1 <<". ";
         std::cout<<Info[i].UserID<<" "<<Info[i].behave<<std::endl;
     }
     delete []Info;
@@ -42,7 +43,7 @@ void Blog::ReadAll(Finance & FinanceManage,User &UserManage) {
         throw InvalidExpression();
     }
 
-    std::cout<<"------Here is the Log Report      ------"<<std::endl;
+    std::cout<<"------         Log Report         ------"<<std::endl;
     std::cout<<"------First Part: Finance Report  ------"<<std::endl;
     FinanceManage.ReportFinance(UserManage);
     std::cout<<"------Second Part: Employee Report------"<<std::endl;
